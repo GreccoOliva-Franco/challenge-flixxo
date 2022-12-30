@@ -7,7 +7,7 @@ import { AuthController } from './auth.controller';
 const router = Router();
 
 router.post('/signup', AuthController.signUp);
-// router.post('/signin', AuthController.signIn);
-// router.post('/refresh', makeValidateBody(AuthRefreshDto), AuthController.refreshToken);
+router.post('/signin', AuthController.signIn);
+router.post('/refresh', AuthController.refreshTokens);
 
 export default router;
