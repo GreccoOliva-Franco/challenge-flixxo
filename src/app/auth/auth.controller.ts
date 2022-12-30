@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import httpCodes from 'http-status-codes';
 
-import { IAuthSignUpCredentials } from './interfaces/auth.interface';
+import { IAuthSignInCredentials, IAuthSignUpCredentials } from './interfaces/auth.interface';
 
 import { AuthService } from './auth.service';
 
@@ -31,7 +31,7 @@ export class AuthController {
 
 	static async signIn(req: Request, res: Response): Promise<Response> {
 		try {
-			const { username, email, password } = req.body as IAuthSignUpCredentials;
+			const { username, email, password } = req.body as IAuthSignInCredentials;
 
 			const tokens = await AuthService.signIn({ username, email, password });
 
