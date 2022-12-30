@@ -1,6 +1,6 @@
 import jwt, { JsonWebTokenError, JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 
-import userService from "../users/user.service";
+import { UserService } from "../users/user.service";
 
 import { User } from '../users/user.entity';
 
@@ -16,7 +16,7 @@ export class AuthService {
 
 	static async signUp(credentials: IAuthSignUpCredentials): Promise<void> {
 		try {
-			await userService.create(credentials);
+			await UserService.create(credentials);
 		} catch (error) {
 			if (error instanceof UserAlreadyExistsError) throw error;
 
@@ -26,7 +26,7 @@ export class AuthService {
 
 	static async signIn(credentials: IAuthSignUpCredentials): Promise<IAuthTokens> {
 		try {
-			const user = await userService.validateCredentials(credentials);
+			const user = await UserService.validateCredentials(credentials);
 			if (!user) throw new UserInvalidCredentialsError();
 
 			const accessToken = this.generateAccessToken(user);
@@ -42,7 +42,7 @@ export class AuthService {
 		try {
 			const { payload } = <JwtPayload>jwt.verify(refreshToken, authConfig.jwt.tokens.refresh.secret, { complete: true });
 
-			const user = (await userService.findOneBy({ id: payload.userId }))!;
+			const user = (await UserService.findOneBy({ id: payload.userId }))!;
 
 			const accessToken = this.generateAccessToken(user);
 
