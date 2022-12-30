@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"lib": ["ES2020"],
+		"outDir": "./dist",
+		"removeComments": true,
+		"target": "ES2017",
+		"module": "commonjs",
+
+		"esModuleInterop": true,
+		"moduleResolution": "node",
+
+		"alwaysStrict": true,
+		"strictNullChecks": true,
+
+		"allowUnreachableCode": false,
+		"noImplicitAny": false,
+		"noImplicitReturns": false,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": true,
+
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+	},
+	"include": ["./src/**/*.ts"],
+	"exclude": ["node_modules/**/*"]
+}
