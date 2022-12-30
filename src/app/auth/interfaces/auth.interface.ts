@@ -13,7 +13,7 @@ export interface IAuthService {
 
 export interface IAuthSignUpCredentials {
 	username: string;
-	email: string;
+	// email: string;
 	password: string;
 }
 
