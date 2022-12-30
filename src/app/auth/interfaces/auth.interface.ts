@@ -17,6 +17,8 @@ export interface IAuthSignUpCredentials {
 	password: string;
 }
 
+export interface IAuthSignInCredentials extends IAuthSignUpCredentials { }
+
 export interface IAuthTokens {
 	[key: string]: string
 }
