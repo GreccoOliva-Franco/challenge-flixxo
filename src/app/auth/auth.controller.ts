@@ -3,7 +3,7 @@ import httpCodes from 'http-status-codes';
 
 import { IAuthSignInCredentials, IAuthSignUpCredentials } from './interfaces/auth.interface';
 
-import { AuthService } from './auth.service';
+import authService from './auth.service';
 
 import { UserAlreadyExistsError, UserInvalidCredentialsError } from '../../common/errors/users/user.error';
 import { AuthTokenExpiredError, AuthTokenInvalidError } from '../../common/errors/auth/auth.error';
@@ -12,11 +12,11 @@ import { ErrorLogger } from '../../common/loggers/error.logger';
 export class AuthController {
 	constructor() { };
 
-	static async signUp(req: Request, res: Response): Promise<Response> {
+	async signUp(req: Request, res: Response): Promise<Response> {
 		try {
-			const { username, email, password } = req.body as IAuthSignUpCredentials;
+			const { username, password } = <IAuthSignUpCredentials>req.body;
 
-			await AuthService.signUp({ username, email, password });
+			await authService.signUp({ username, password });
 
 			const response = { success: true };
 
@@ -29,11 +29,11 @@ export class AuthController {
 		}
 	}
 
-	static async signIn(req: Request, res: Response): Promise<Response> {
+	async signIn(req: Request, res: Response): Promise<Response> {
 		try {
-			const { username, email, password } = req.body as IAuthSignInCredentials;
+			const { username, password } = <IAuthSignInCredentials>req.body;
 
-			const tokens = await AuthService.signIn({ username, email, password });
+			const tokens = await authService.signIn({ username, password });
 
 			return res.status(httpCodes.OK).json(tokens);
 		} catch (error) {
@@ -44,11 +44,11 @@ export class AuthController {
 		}
 	};
 
-	static async refreshTokens(req: Request, res: Response): Promise<Response> {
+	async refreshTokens(req: Request, res: Response): Promise<Response> {
 		try {
 			const { refreshToken } = req.body;
 
-			const tokens = await AuthService.refreshTokens(refreshToken);
+			const tokens = await authService.refreshTokens(refreshToken);
 
 			return res.status(httpCodes.OK).json(tokens);
 		} catch (error) {
