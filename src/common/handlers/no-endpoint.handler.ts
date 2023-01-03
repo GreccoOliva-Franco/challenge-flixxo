@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-
 import httpCodes from 'http-status-codes';
 
 export function notFoundHandler(_: Request, res: Response) {
