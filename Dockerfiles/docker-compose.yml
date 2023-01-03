@@ -31,7 +31,7 @@ services:
         networks:
             - backend
         links:
-            - "mysql"
+            - "db"
 
 # volumes:
 #     db_data:
