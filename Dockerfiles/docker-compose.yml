@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+    db:
+        container_name: mysql
+        image: mysql
+        restart: always
+        # volumes:
+        #     - db_data:/var/lib/mysql
+        env_file:
+            - .env
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: test
+        ports:
+            - "${LOCAL_MYSQL_PORT}:3306"
+        networks:
+            - backend
+    flixxo:
+        container_name: flixxo
+        build:
+            context: ../
+            dockerfile: ./Dockerfiles/flixxo/Dockerfile
+        depends_on:
+            - db
+        env_file:
+            - .env
+            - ../.env
+        ports:
+            - "${LOCAL_FLIXXO_PORT}:${CONTAINER_FLIXXO_PORT}"
+        networks:
+            - backend
+        links:
+            - "db"
+
+# volumes:
+#     db_data:
+
+
+networks:
+    backend:
+        driver: bridge
