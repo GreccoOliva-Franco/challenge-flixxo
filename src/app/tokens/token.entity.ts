@@ -1,6 +1,5 @@
-import { Entity, BaseEntity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
+import { Entity, BaseEntity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm";
 import { IToken } from "./interfaces/token.interface";
-
 
 @Entity('tokens')
 export class Token implements IToken {
@@ -21,6 +20,9 @@ export class Token implements IToken {
 	deletedAt: Date;
 
 	// data
+	@Column({ nullable: false })
+	price: number;
+
 	@Column({ nullable: false, unique: true })
 	name: string;
 

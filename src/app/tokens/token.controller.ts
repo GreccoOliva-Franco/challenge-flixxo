@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import httpCodes from 'http-status-codes';
 
-import tokenService, { TokenService } from "./token.service";
+import tokenService from "./token.service";
 
 import { TokenCreateDto, TokenUpdateDto } from "./dtos/token.dto";
 
 import { TokenQueryFilter } from "./interfaces/token.interface";
 
 import { ErrorLogger } from "../../common/loggers/error.logger";
+
+import { TokenAlreadyExistsError } from "../../common/errors/tokens/token.error";
 
 export class TokenController {
 	constructor() { }
@@ -67,6 +69,8 @@ export class TokenController {
 
 			return res.status(httpCodes.CREATED).json(response);
 		} catch (error) {
+			if (error instanceof TokenAlreadyExistsError) return res.status(httpCodes.BAD_REQUEST).json({ success: false, message: error.message });
+
 			ErrorLogger.logUncaughtError(error);
 
 			const response = { success: false };
@@ -80,6 +84,7 @@ export class TokenController {
 			const dto = <TokenUpdateDto>req.body;
 
 			const token = await tokenService.updateById(tokenId!, dto);
+			if (!token) return res.status(httpCodes.BAD_REQUEST).json({ success: false, message: "Token not found" })
 
 			const response = {
 				success: true,
