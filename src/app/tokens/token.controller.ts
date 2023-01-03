@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import httpCodes from 'http-status-codes';
 
 import tokenService from "./token.service";
+import tokenHistoryService from "./modules/token-history/token-history.service";
 
 import { TokenCreateDto, TokenUpdateDto } from "./dtos/token.dto";
 
@@ -54,13 +55,52 @@ export class TokenController {
 		}
 	}
 
+	async getPriceById(req: Request, res: Response): Promise<Response> {
+		try {
+			const { tokenId } = req.params;
+
+			const token = await tokenService.findById(tokenId!);
+			if (!token) return res.status(httpCodes.BAD_REQUEST).json({ success: false, message: "Token not found" });
+
+			const response = {
+				success: true,
+				data: token.price,
+			}
+
+			return res.status(httpCodes.OK).json(response)
+		} catch (error) {
+			ErrorLogger.logUncaughtError(error);
+
+			const response = { success: false };
+			return res.status(httpCodes.INTERNAL_SERVER_ERROR).json(response);
+		}
+	}
+
+	async getHistoryById(req: Request, res: Response): Promise<Response> {
+		try {
+			const { tokenId } = req.params;
+
+			const history = await tokenHistoryService.findById(tokenId!);
+
+			const response = {
+				success: true,
+				data: history,
+			}
+
+			return res.status(httpCodes.OK).json(response)
+		} catch (error) {
+			ErrorLogger.logUncaughtError(error);
+
+			const response = { success: false };
+			return res.status(httpCodes.INTERNAL_SERVER_ERROR).json(response);
+		}
+	}
+
 	async create(req: Request, res: Response): Promise<Response> {
 		try {
-			const { price, ...dto } = <TokenCreateDto>req.body;
+			const data = <TokenCreateDto>req.body;
 
-			const token = await tokenService.create(<Omit<TokenCreateDto, "price">>dto);
-
-			// await tokenHistoryService.create({ tokenId: token.id, price });
+			const token = await tokenService.create(data);
 
 			const response = {
 				success: true,
