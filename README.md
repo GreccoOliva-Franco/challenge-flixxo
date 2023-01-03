@@ -6,6 +6,11 @@
 
 - Copy ".env.example" into ".env" file and populate the ".env" file. (IMPORTANT: this env variable "DEPLOY_CONFIG" must be set to *docker* execution enviroment)
 
+## Limitations
+
+- Dependency Injection is not implemented.
+- Inversion of Control is not implemented.
+
 ## Initzialization
 
 ### First time
