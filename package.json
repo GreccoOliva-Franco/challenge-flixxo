@@ -5,7 +5,6 @@
 	"main": "./dist/main.js",
 	"type": "commonjs",
 	"scripts": {
-		"prestart": "npm run build",
 		"start": "node .",
 		"prebuild": "rm -rf ./dist",
 		"build": "tsc",
@@ -33,6 +32,7 @@
 		"express-class-validator": "^1.0.3",
 		"helmet": "^6.0.0",
 		"http-status-codes": "^2.2.0",
+		"morgan": "^1.10.0",
 		"mysql2": "^2.3.3",
 		"passport": "^0.6.0",
 		"passport-jwt": "^4.0.0",
