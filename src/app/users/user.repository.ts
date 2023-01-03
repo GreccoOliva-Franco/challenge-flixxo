@@ -8,16 +8,8 @@ import { IUserRepositoryImplementation } from './interfaces/user.interface'
 
 
 export class UserRepository extends Repository<User> implements IUserRepositoryImplementation {
-	static instance: UserRepository;
-
 	constructor(target: EntityTarget<User>, database: DataSource) {
 		super(target, database.manager);
-	}
-
-	static getInstance(): UserRepository {
-		if (!UserRepository.instance) UserRepository.instance = new UserRepository(User, database);
-
-		return UserRepository.instance;
 	}
 
 	async findProfileByID(userId: string): Promise<User | null> {
@@ -30,6 +22,15 @@ export class UserRepository extends Repository<User> implements IUserRepositoryI
 
 		return user;
 	}
+
+	async findPasswordByUsername(username: string): Promise<User | null> {
+		const user = await this.createQueryBuilder('user')
+			.where('user.username = :username', { username })
+			.select(['user.id', 'user.password'])
+			.getOne();
+
+		return user;
+	}
 }
 
-export default UserRepository.getInstance();
+export default new UserRepository(User, database);
