@@ -1,6 +1,6 @@
 import { CustomError } from '../custom.error';
 
-import { IErrorHint } from '../interaces/error.interface';
+import { IErrorHint } from '../interfaces/error.interface';
 
 const prefix = 'users-E00-';
 

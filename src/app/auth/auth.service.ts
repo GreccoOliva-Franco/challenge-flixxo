@@ -1,12 +1,11 @@
 import jwt, { JsonWebTokenError, JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 
-import { UserService } from "../users/user.service";
-
+import userService from '../users/user.service';
 import { User } from '../users/user.entity';
 
 import authConfig from '../../configs/auth';
 
-import { IAuthSignUpCredentials, IAuthService, IAuthTokenPayload, IAuthTokens } from "./interfaces/auth.interface";
+import { IAuthSignUpCredentials, IAuthTokenPayload, IAuthTokens } from "./interfaces/auth.interface";
 
 import { UserAlreadyExistsError, UserInvalidCredentialsError } from "../../common/errors/users/user.error";
 import { AuthTokenExpiredError, AuthTokenInvalidError } from '../../common/errors/auth/auth.error';
@@ -14,19 +13,17 @@ import { AuthTokenExpiredError, AuthTokenInvalidError } from '../../common/error
 export class AuthService {
 	constructor() { };
 
-	static async signUp(credentials: IAuthSignUpCredentials): Promise<void> {
+	async signUp(credentials: IAuthSignUpCredentials): Promise<void> {
 		try {
-			await UserService.create(credentials);
+			await userService.create(credentials);
 		} catch (error) {
-			if (error instanceof UserAlreadyExistsError) throw error;
-
 			throw error;
 		}
 	}
 
-	static async signIn(credentials: IAuthSignUpCredentials): Promise<IAuthTokens> {
+	async signIn(credentials: IAuthSignUpCredentials): Promise<IAuthTokens> {
 		try {
-			const user = await UserService.validateCredentials(credentials);
+			const user = await userService.validateCredentials(credentials);
 			if (!user) throw new UserInvalidCredentialsError();
 
 			const accessToken = this.generateAccessToken(user);
@@ -38,11 +35,11 @@ export class AuthService {
 		}
 	}
 
-	static async refreshTokens(refreshToken: string): Promise<IAuthTokens> {
+	async refreshTokens(refreshToken: string): Promise<IAuthTokens> {
 		try {
 			const { payload } = <JwtPayload>jwt.verify(refreshToken, authConfig.jwt.tokens.refresh.secret, { complete: true });
 
-			const user = (await UserService.findOneBy({ id: payload.userId }))!;
+			const user = (await userService.findOneBy({ id: payload.userId }))!;
 
 			const accessToken = this.generateAccessToken(user);
 
@@ -55,7 +52,7 @@ export class AuthService {
 		}
 	}
 
-	private static generateAccessToken(user: User): string {
+	private generateAccessToken(user: User): string {
 		const payload: IAuthTokenPayload = {
 			userId: user.id,
 			username: user.username,
@@ -64,7 +61,7 @@ export class AuthService {
 		return jwt.sign(payload, authConfig.jwt.tokens.access.secret, { expiresIn: authConfig.jwt.tokens.access.expireTime });
 	}
 
-	private static generateRefreshToken(user: User): string {
+	private generateRefreshToken(user: User): string {
 		const payload: IAuthTokenPayload = {
 			userId: user.id,
 		};
@@ -72,3 +69,5 @@ export class AuthService {
 		return jwt.sign(payload, authConfig.jwt.tokens.refresh.secret, { expiresIn: authConfig.jwt.tokens.refresh.expireTime });
 	}
 }
+
+export default new AuthService()

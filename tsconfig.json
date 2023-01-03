@@ -4,7 +4,7 @@
 		"outDir": "./dist",
 		"removeComments": true,
 		"target": "ES2017",
-		"module": "commonjs",
+		"module": "CommonJS",
 
 		"esModuleInterop": true,
 		"moduleResolution": "node",
