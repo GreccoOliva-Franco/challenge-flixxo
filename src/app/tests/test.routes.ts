@@ -4,7 +4,6 @@ import HttpCodes from 'http-status-codes';
 
 // Infrastructure
 import database from '../../infrastractures/database';
-import userRepository from '../users/user.repository';
 
 const router = Router();
 
