@@ -63,6 +63,14 @@ export class TokenService {
 			throw error;
 		}
 	}
+
+	async deleteAll(): Promise<void> {
+		try {
+			await tokenRepository.delete({});
+		} catch (error) {
+			throw error;
+		}
+	}
 }
 
 export default new TokenService();

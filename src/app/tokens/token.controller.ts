@@ -139,6 +139,21 @@ export class TokenController {
 			return res.status(httpCodes.INTERNAL_SERVER_ERROR).json(response);
 		}
 	}
+
+	async deleteAll(_: Request, res: Response): Promise<Response> {
+		try {
+			await tokenService.deleteAll();
+
+			const response = { success: true };
+
+			return res.status(httpCodes.OK).json(response);
+		} catch (error) {
+			ErrorLogger.logUncaughtError(error);
+
+			const response = { success: false };
+			return res.status(httpCodes.INTERNAL_SERVER_ERROR).json(response);
+		}
+	}
 }
 
 export default new TokenController();
