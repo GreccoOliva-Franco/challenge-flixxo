@@ -11,6 +11,6 @@ routes.get("/:tokenId/history", tokenController.getHistoryById)
 
 routes.post("/", tokenController.create)
 
-routes.patch("/:tokenId", tokenController.updateById)
+routes.delete('/', tokenController.deleteAll)
 
 export default routes;
