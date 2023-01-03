@@ -1,4 +1,4 @@
-import { ICustomError } from "./interaces/error.interface";
+import { ICustomError } from "./interfaces/error.interface";
 
 export abstract class CustomError extends Error {
 	public name: string;
